@@ -1,1 +1,1 @@
-web: waitress-serve --port=$PORT mondotoshl:app.app
+web: waitress-serve --port=$PORT mondotoshl.app:app

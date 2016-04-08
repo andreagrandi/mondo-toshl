@@ -7,7 +7,7 @@ from toshl.client import ToshlClient, Account, Category, Entry
 
 app = Flask(__name__)
 
-MONDO_TOSHL_TOKEN = os.environ.get('MONDO_TOSHL_TOKEN', 'abc123')
+MONDO_TOSHL_TOKEN = os.environ.get('MONDO_TOSHL_TOKEN')
 TOSHL_API_TOKEN = os.environ.get('TOSHL_API_TOKEN')
 TOSHL_MONDO_ACCOUNT_NAME = os.environ.get('TOSHL_MONDO_ACCOUNT_NAME', 'Mondo')
 TOSHL_MONDO_CATEGORY_NAME = os.environ.get(

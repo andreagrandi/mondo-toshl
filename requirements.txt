@@ -1,3 +1,4 @@
 Flask==0.10.1
 toshl==0.0.2
 waitress==0.8.10
+Logentries==0.15

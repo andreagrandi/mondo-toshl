@@ -3,6 +3,8 @@ from datetime import datetime
 from flask import Flask
 from flask import request
 from toshl.client import ToshlClient, Account, Category, Entry
+from logentries import LogentriesHandler
+import logging
 
 
 app = Flask(__name__)
@@ -12,6 +14,12 @@ TOSHL_API_TOKEN = os.environ.get('TOSHL_API_TOKEN')
 TOSHL_MONDO_ACCOUNT_NAME = os.environ.get('TOSHL_MONDO_ACCOUNT_NAME', 'Mondo')
 TOSHL_MONDO_CATEGORY_NAME = os.environ.get(
     'TOSHL_MONDO_CATEGORY_NAME', 'mondo-toshl')
+LOGENTRIES_TOKEN = os.environ.get('LOGENTRIES_TOKEN')
+
+log = logging.getLogger('logentries')
+log.setLevel(logging.INFO)
+mondotoshl_logger = LogentriesHandler(LOGENTRIES_TOKEN)
+log.addHandler(mondotoshl_logger)
 
 
 @app.route('/transactions', methods=['POST'])
@@ -20,6 +28,7 @@ def mondo_hook():
         token = request.args.get('token')
         if token == MONDO_TOSHL_TOKEN:
             data = request.get_json()
+            log.info(data)
             # Only handle transaction.created events
             if data['type'] == 'transaction.created':
                 amount = data['data']['amount']

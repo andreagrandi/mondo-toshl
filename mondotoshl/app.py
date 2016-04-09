@@ -51,6 +51,7 @@ def mondo_hook():
                     entry_client.create(json_payload)
 
                     return '', 201
+    return '', 200
 
 
 if __name__ == '__main__':

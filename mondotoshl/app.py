@@ -59,7 +59,7 @@ def mondo_hook():
                     entry_client = Entry(client)
                     entry_client.create(json_payload)
 
-                    return '', 201
+                    return '', 200
     return '', 200
 
 

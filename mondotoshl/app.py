@@ -14,6 +14,8 @@ TOSHL_API_TOKEN = os.environ.get('TOSHL_API_TOKEN')
 TOSHL_MONDO_ACCOUNT_NAME = os.environ.get('TOSHL_MONDO_ACCOUNT_NAME', 'Mondo')
 TOSHL_MONDO_CATEGORY_NAME = os.environ.get(
     'TOSHL_MONDO_CATEGORY_NAME', 'mondo-toshl')
+TOSHL_MONDO_REFUND_CATEGORY_NAME = os.environ.get(
+    'TOSHL_MONDO_REFUND_CATEGORY_NAME', 'mondo-toshl-refund')
 LOGENTRIES_TOKEN = os.environ.get('LOGENTRIES_TOKEN')
 
 log = logging.getLogger('logentries')
@@ -31,16 +33,23 @@ def mondo_hook():
             log.info(data)
             # Only handle transaction.created events
             if data['type'] == 'transaction.created':
+                is_load = data['data']['is_load']
                 amount = data['data']['amount']
                 # Only log expenses for the moment
-                if amount < 0:
+                if not is_load:
                     client = ToshlClient(TOSHL_API_TOKEN)
 
                     account_client = Account(client)
                     account = account_client.search(TOSHL_MONDO_ACCOUNT_NAME)
 
                     category_client = Category(client)
-                    category = category_client.search(TOSHL_MONDO_CATEGORY_NAME)
+
+                    if amount < 0:
+                        category = category_client.search(
+                            TOSHL_MONDO_CATEGORY_NAME)
+                    else:
+                        category = category_client.search(
+                            TOSHL_MONDO_REFUND_CATEGORY_NAME)
 
                     now = datetime.now()
 
